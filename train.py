@@ -426,7 +426,13 @@ def main(args):
             yaml_save_path = f"{os.path.join(save_ckpt_dir, os.path.basename(save_path))}.yaml"
             logging.info(f" * Saving yaml to {yaml_save_path}")
             shutil.copyfile(yaml_name, yaml_save_path)
-
+        
+        
+        #remove diffuser after convert to checkpoint
+        logging.info(f" * Removing diffusers model from {save_path}")
+        shutil.rmtree(save_path, ignore_errors=True)
+        
+        
         # optimizer_path = os.path.join(save_path, "optimizer.pt")
         # if self.save_optimizer_flag:
         #     logging.info(f" Saving optimizer state to {save_path}")
