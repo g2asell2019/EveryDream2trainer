@@ -28,6 +28,8 @@ import random
 import traceback
 import shutil
 import importlib
+import subprocess
+from pathlib import Path
 
 import torch.nn.functional as F
 from torch.cuda.amp import autocast, GradScaler
@@ -427,10 +429,12 @@ def main(args):
             logging.info(f" * Saving yaml to {yaml_save_path}")
             shutil.copyfile(yaml_name, yaml_save_path)
         
-        
+        if not str(os.path.basename(save_path)).startswith("last-"):
+            full_dir = Path(os.path.join(os.getcwd(), save_path)).resolve()
+            subprocess.run('bash /content/uploader.sh -p ' + str(full_dir), shell=True)
         #remove diffuser after convert to checkpoint
-        logging.info(f" * Removing diffusers model from {save_path}")
-        shutil.rmtree(save_path, ignore_errors=True)
+        # logging.info(f" * Removing diffusers model from {save_path}")
+        # shutil.rmtree(save_path, ignore_errors=True)
         
         
         # optimizer_path = os.path.join(save_path, "optimizer.pt")
